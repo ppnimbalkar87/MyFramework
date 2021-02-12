@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.annotations.DataProvider;
@@ -30,14 +31,30 @@ public class ExcelDataProvider {
 //		return wb.getSheetAt(SheetIndex).getRow(rowno).getCell(colno).getStringCellValue();
 //	}
 	@DataProvider(name="wordpressData")	
-	public Object[][] passLoginData()
+	public Object[][] Logindata(Method m)
 	{
-		int row=getRowCount("login");
+		Object[][] arrayObject=null;
+		String TestName=m.getName();
+		if(TestName.equalsIgnoreCase("ValidLoginApp"))
+		{
+			arrayObject=passLoginData("login");
+		}
+		else if(TestName.equalsIgnoreCase("InalidLoginApp"))
+		{
+			arrayObject=passLoginData("Inlogin");
+		}
+		return arrayObject;
+		
+	}
+	
+	public Object[][] passLoginData(String SheetName)
+	{
+		int row=getRowCount(SheetName);
 		Object[][] credentials=new Object[row][2];
 		for(int i=0;i<row;i++)
 		{
-			credentials[i][0]=getStringData("login", i, 0);
-			credentials[i][1]=getStringData("login", i, 1);
+			credentials[i][0]=getStringData(SheetName, i, 0);
+			credentials[i][1]=getStringData(SheetName, i, 1);
 		}
 		return credentials;
 	}
